@@ -72,7 +72,7 @@
                                     <input type="text" class="form-control qty" name="qty[]">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control amount" name="amount[]" style="text-align: right">
+                                    <input type="text" class="form-control amount" name="amount[]" readonly="" style="text-align: right">
                                 </td>
                                 <td>
                                     <a class="btn btn-danger hapus" href="#">X</a>
@@ -85,7 +85,6 @@
                             </tr>
                             </tbody>
                         </table>
-                        <br><br><br><br><br><br>
                     </div>
                 </form>
             </div>
@@ -147,22 +146,22 @@
             tr.find('.amount').val('');
             $('.total').html('');
         });
-    //     $('.tbody').delegate('.jumlah','keyup', function () {
-    //         var tr = $(this).parent().parent();
-    //         var harga = tr.find('.harga').val();
-    //         var jumlah = tr.find('.jumlah').val();
-    //         var hasil = jumlah*harga;
-    //         tr.find('.subtotal').val(hasil);
-    //         console.log(jumlah);
-    //         total();
-    //     });
-    //     function total() {
-    //         var total = 0;
-    //         $('.subtotal').each(function () {
-    //             var stotal = $(this).val()-0;
-    //             total +=stotal;
-    //         });
-    //         $('.total').html('Rp '+total);
-    //     }
-    // });
+        $('.tbody').delegate('.qty','keyup', function () {
+            var tr = $(this).parent().parent();
+            var price = tr.find('.price').val();
+            var qty = tr.find('.qty').val();
+            var hasil = qty*price;
+            tr.find('.amount').val(hasil);
+            console.log(qty);
+            total();
+        });
+        function total() {
+            var total = 0;
+            $('.amount').each(function () {
+                var stotal = $(this).val()-0;
+                total +=stotal;
+            });
+            $('.total').html('Rp '+total);
+        }
+    });
 </script>

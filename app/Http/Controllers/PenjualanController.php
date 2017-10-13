@@ -48,6 +48,7 @@ class PenjualanController extends Controller
             'ppn' =>'required',
         ]);
 
+        $price = Barang::where('id',$price)->value('price');
 
             $penjualan = new Penjualan();
             $penjualan ->nota = $request->nota;
@@ -55,8 +56,8 @@ class PenjualanController extends Controller
             $penjualan ->nama_pembeli = $request->nama_pembeli;
             $penjualan ->barang_id = $request->input('barang_id');
             $penjualan ->qty = $request->input('qty');
-            $penjualan ->price = $request ->input('price');
-            $penjualan ->amount = $request ->input('amount');
+            $penjualan ->price = $price;
+            $penjualan ->amount = $amount;
             $penjualan ->dpp = $request ->input('dpp');
             $penjualan ->ppn = $request ->input('ppn');
             $penjualan->save();
