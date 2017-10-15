@@ -57,8 +57,11 @@ font-size: 16px;">
                         <a class="active-menu"  href="/" class="fa fa-dashboard fa-3x"></i> Dashboard</a>
                     </li>
                     @if (Auth::check())
-                     <li>
+                    <li>
                         <a  href="{{route('barang.index')}}"><i class="fa fa-desktop fa-3x"></i>Barang</a>
+                    </li>
+                    <li>
+                        <a  href="{{route('promo.index')}}"><i class="fa fa-desktop fa-3x"></i>Promo</a>
                     </li>
                     <li>
                         <a  href="{{route('penjualan.index')}}"><i class="fa fa-desktop fa-3x"></i>Penjualan</a>

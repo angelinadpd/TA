@@ -25,18 +25,23 @@
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Crete Data Penjualan
+                    Create Data Penjualan
                 </div>
                 <div class="panel-body">
                     <form role="form" method="POST" action="{{ route('penjualan.store') }}">
                         {{ csrf_field() }}
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="nota" id="nota" placeholder="Nota">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <input type="date" class="form-control" name="tgl" id="tgl" placeholder="Tanggal Penjualan">
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="nama_pembeli" id="nama_pembeli" placeholder="Nama Pembeli">
                                 </div>
@@ -47,8 +52,9 @@
                             <thead>
                             <tr>
                                 <th class="col-md-3">Tipe Barang dan Nama Barang</th>
-                                <th class="col-md-3">Price</th>
-                                <th class="col-md-3">Quantity</th>
+                                <th class="col-md-2">Stok</th>
+                                <th class="col-md-2">Price</th>
+                                <th class="col-md-2">Quantity</th>
                                 <th>Amount</th>
                                 <th>
                                     <a href="#" class="btn btn-flat tambah"><i class="fa fa-plus"></i></a>
@@ -58,15 +64,18 @@
                             <tbody class="tbody">
                             <tr>
                                 <td>
-                                    <select name="barang[]" required="" class="form-control" >
+                                    <select name="barang[]" required="" class="form-control barang">
                                         <option>--Pilih Barang--</option>
                                         @foreach($barangs as $barang)
                                         <option value="{{$barang->id}}"> {{ $barang->tipe_barang }} | {{ $barang->nama_barang }}</option>
                                         @endforeach
                                     </select>
                                 </td>
-                                <td id="price">
-                                    <input type="text" class="form-control price" id="price" name="price[]" readonly="">
+                                <td>
+                                    <input type="text" class="form-control stok" name="stok[]" readonly="">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control price" name="price[]" readonly="">
                                 </td>
                                 <td>
                                     <input type="text" class="form-control qty" name="qty[]">
@@ -86,19 +95,72 @@
                             </tbody>
                         </table>
                     </div>
+                    <br>
+                    <br>
+
+                     <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Discount Uang
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <div class="form-group">
+                                                <p>Persenan</p>
+                                                <div class="form-group input-group">
+                                                    <input type="text" name="persenan" value="" class="form-control">
+                                                    <span class="input-group-addon">%</span>
+                                                </div>
+                                                {{ ($errors->has('persenan'))? $errors->first('persenan') : '' }}
+                                        </div>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                      <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Discount Barang
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <div class="form-group">
+                                                <p>Tipe Barang</p>
+                                                <select name="promo_id"  class="form-control">
+                                                    <option>--Pilih Barang--</option>
+                                                    @foreach($promos as $promo)
+                                                    <option value="{{ $promo->promo_id }}"> {{ $barang->tipe_barang }} |  {{ $barang->nama_barang }}</option>
+                                                    @endforeach
+                                                </select>
+                                                {{ ($errors->has('barang_id')) ? $errors->first('barang_id') : '' }}<br>
+
+                                                <p>Jumlah Barang</p>
+                                                <input type="text" name="discount_qty" value="" class="form-control">
+                                                {{ ($errors->has('discount_qty')) ? $errors->first('discount_qty') : '' }}<br>
+                                        </div>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <button class="btn btn-success" type="submit" name="submit">Post</button>
+                    <button class="btn btn-warning" type="reset" name="reset">Reset</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
-    <input type="hidden" name="_token" value="{{ csrf_token() }}">
-    <button class="btn btn-success" type="submit" name="submit">Post</button>
-    <button class="btn btn-warning" type="reset" name="reset">Reset</button>
+
 
 @endsection
 <script src="/vendors/js/jquery-1.10.2.js"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
+    $(document).ready(function() {
         $(document).on('click','.tambah',function () {
             var table = document.getElementById('tbdetail');
             var row1 = document.getElementById('row1');
@@ -108,7 +170,8 @@
             var cell3 = row.insertCell(2);
             var cell4 = row.insertCell(3);
             var cell5 = row.insertCell(4);
-            cell1.innerHTML ='<select name="barang[]" required="" class="form-control" >'+
+            var cell5 = row.insertCell(5);
+            cell1.innerHTML ='<select name="barang[]" required="" class="form-control barang" >'+
                                 '<option>--Pilih Barang--</option>'+
                                 '@foreach($barangs as $barang)'+
                                 '<option value="{{$barang->id}}">'+
@@ -117,31 +180,34 @@
                                 '{{ $barang->nama_barang }}</option>'+
                                 '@endforeach'+
                             '</select>'; 
-            cell2.innerHTML = '<input type="text" class="form-control price" id="price" name="price[]" readonly="">';
-            cell3.innerHTML = '<input type="text" class="form-control qty" name="qty[]">';
-            cell4.innerHTML = '<input type="text" class="form-control amount" name="amount[]" style="text-align: right">';
-            cell5.innerHTML = '<a class="btn btn-danger" href="#">X</a>';
+            cell2.innerHTML = '<input type="text" class="form-control stok" id="stok" name="stok[]" readonly="">';
+            cell3.innerHTML = '<input type="text" class="form-control price" id="price" name="price[]" readonly="">';
+            cell4.innerHTML = '<input type="text" class="form-control qty" name="qty[]">';
+            cell5.innerHTML = '<input type="text" class="form-control amount" name="amount[]" style="text-align: right" readonly>';
+            cell6.innerHTML = '<a class="btn btn-danger" href="#">X</a>';
             row1.before(row);
         });
-        $('.tbody').delegate('.barang','change',function () {
+        $('.tbody').delegate('.barang','change', function () {
             var tr = $(this).parent().parent();
             var idbarang = tr.find('.barang').val();
             $.ajax({
                 type:'get',
                 url:'{!! URL::to('/data-price') !!}',
                 data:{'id':idbarang},
-                success:function (data) {
+                success:function(data) {
                     for(i=0;i<data.length;i++)
                     {
                         if(data[i].id==idbarang)
                         {
                             tr.find('.price').val(data[i].price);
+                            tr.find('.stok').val(data[i].stok);
                             tr.find('.barang_id').val(data[i].barang_id);
-                            console.log(data[i].barang_id);
+                            console.log(data[i].id);
                         }
                     }
                 }
             });
+            tr.find('.stok ').val('');
             tr.find('.price').val('');
             tr.find('.amount').val('');
             $('.total').html('');

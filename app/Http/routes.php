@@ -55,6 +55,15 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::post('realisasi/cetak/pdf', ['as' => 'realisasi.pdf', 'uses' => 'RealisasiController@getpdftanggal']);
 	Route::get('realisasi/selecttanggal/select', ['as' => 'realisasi.realisasipemesanan', 'uses' => 'RealisasiController@selecttanggal']);
 
+	// ==Routes Promo Penjualan
+	Route::resource('promo', 'PromoController');
+	Route::get('promo', ['as' => 'promo.index', 'uses' => 'PromoController@index','middleware' => ['role:AdminPenjualan']]);
+	Route::get('promo/create', ['as' => 'promo.create', 'uses' => 'PromoController@create','middleware' => ['role:AdminPenjualan']]);
+	Route::post('promo/create', ['as' => 'promo.store', 'uses' => 'PromoController@store','middleware' => ['role:AdminPenjualan']]);
+	Route::get('promo/{id}/edit', ['as' => 'promo.edit', 'uses' => 'PromoController@edit','middleware' => ['role:AdminPenjualan']]);
+	Route::patch('promo/{id}', ['as' => 'promo.update', 'uses' => 'PromoController@update','middleware' => ['role:AdminPenjualan']]);
+	Route::get('promo/delete/{id}', ['as' => 'promo.destroy', 'uses' => 'PromoController@destroy','middleware' => ['role:AdminPenjualan']]);
+	
 	// ==Routes Penjualan
 	Route::resource('penjualan', 'PenjualanController');
 	Route::get('penjualan', ['as' => 'penjualan.index', 'uses' => 'PenjualanController@index','middleware' => ['role:AdminPenjualan']]);
@@ -62,7 +71,7 @@ Route::group(['middleware' => ['auth']], function() {
 	Route::post('penjualan/create', ['as' => 'penjualan.store', 'uses' => 'PenjualanController@store','middleware' => ['role:AdminPenjualan']]);
 	Route::get('penjualan/delete/{nota}', ['as' => 'penjualan.destroy', 'uses' => 'PenjualanController@destroy','middleware' => ['role:AdminPenjualan']]);
 	Route::get('/data-price',['as'=>'data-price','uses'=>'PenjualanController@dataHarga']);
-	// Laporan Penjulan
+	// Laporan Penjualan
 	Route::post('penjualan/cetak/pdf', ['as' => 'penjualan.pdf', 'uses' => 'PenjualanController@getpdftanggal']);
 	Route::get('penjualan/selecttanggal/select', ['as' => 'penjualan.laporanpenjualan', 'uses' => 'PenjualanController@selecttanggal']);
 	// Cetak Faktur
@@ -71,5 +80,6 @@ Route::group(['middleware' => ['auth']], function() {
 	// Cetak Surat Jalan
 	Route::post('penjualan/cetaksurat/pdf', ['as' => 'penjualan.pdfsuratjalan', 'uses' => 'PenjualanController@pdfsuratjalan']);
 	Route::get('penjualan/selectnotasj/select', ['as' => 'penjualan.selectnotasj', 'uses' => 'PenjualanController@selectnotasj']);
+
 
 });

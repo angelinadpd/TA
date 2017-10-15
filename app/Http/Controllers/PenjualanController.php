@@ -7,6 +7,7 @@ use App\Http\Requests;
 use DB;
 use App\Penjualan;
 use App\Barang;
+use App\Promo;
 use App\Total;
 use App\Http\Controllers\Controller;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -18,6 +19,7 @@ class PenjualanController extends Controller
         $penjualans = DB::table('penjualan')
             ->leftjoin('barang', 'penjualan.barang_id','=','barang.id')
             ->leftjoin('total', 'penjualan.nota','=','total.nota')
+            ->join('promo','penjualan.promo_id','=','promo.id')
             ->select('penjualan.*','barang.tipe_barang','barang.nama_barang')
             ->orderBy('id', 'desc')
             ->paginate(10);  
@@ -29,42 +31,75 @@ class PenjualanController extends Controller
 
     public function create()
     {    
-        // $barang=DB::table('barang')->get();
         $barangs=Barang::All();
-        return view('penjualan.create',compact('barangs'));
+        $promos=Promo::All();
+        return view('penjualan.create',compact('barangs','promos'));
     }
 
     public function store(Request $request)
-    {
-        $this->validate($request,[
-            'nota' => 'required',
-            'tgl' => 'required',
-            'nama_pembeli' => 'required',
-            'barang_id[]' => 'required',
-            'qty' => 'required',
-            'price' => 'required',
-            'amount' => 'required',
-            'dpp' => 'required',
-            'ppn' =>'required',
-        ]);
+    {  
+        $hitung = count($request->get('price'));
+        $datenow = date('Ymd');
+        $nota = $datenow.$request->get('nota');
+        // echo $hitung;
+        // dd();
 
-        $price = Barang::where('id',$price)->value('price');
+        $data = array();
+        $i=0;
+              
+        while($i<$hitung){
+            $id[$i] = $request->get('barang')[$i];
+            $price = Barang::where('id',$request->input('id'))->value('price');
+            $jual = new Penjualan();
 
-            $penjualan = new Penjualan();
-            $penjualan ->nota = $request->nota;
-            $penjualan ->tgl = $request->tgl;
-            $penjualan ->nama_pembeli = $request->nama_pembeli;
-            $penjualan ->barang_id = $request->input('barang_id');
-            $penjualan ->qty = $request->input('qty');
-            $penjualan ->price = $price;
-            $penjualan ->amount = $amount;
-            $penjualan ->dpp = $request ->input('dpp');
-            $penjualan ->ppn = $request ->input('ppn');
-            $penjualan->save();
+            $jual->nota = $nota;
+            $jual->tgl = $request->get('tgl');
+            $jual->nama_pembeli = $request->get('nama_pembeli');
+            $jual->barang_id = $id[$i];
+            $jual->qty = $request->get('qty')[$i];
+            $jual->price = $request->get('price')[$i];
+            $jual->amount = $request->get('amount')[$i]; //hasil qty*harga
+            $jual->dpp = $jual->amount*0.1;
+            $jual->ppn = $jual->amount+$jual->ppn;
+            $jual->promo_id = $request->get('promo_id');
+            
+            $data[$i]=$jual->amount;
+
+            $jual->save();
+
+            // Update stok Penjualan
+            $stokawal = Barang::where('id',$id[$i])->value('stok');
+            $barangs = Barang::find($id[$i]);
+            $barangs->stok = $stokawal - $request->get('qty')[$i];
+            $barangs->save();
+            
+            $i=$i+1;
+        }
+            //Masukkan nilai total
+        $total1=array_sum($data);
+        $diskon = $total1 * $request->get('discount_uang');
+
+            $total = new Total;
+            $total->nota = $jual->nota;
+            $total->total = $total1 - $diskon;
+            $total->barang_id = $request->get('barang_id');
+            $total->discount_qty = $request->get('discount_qty');
+            $total->discount_uang =  $diskon;  
+            $total->save();
+
+        // Update Stok Discount
+        if($request->get('barang_id')!=null and $request->get('discount_qty')){
+            $stokawal = Barang::where('id',$request->get('barang_id'))->value('stok');
+            $barang = Barang::find($request->get('barang_id'));
+            $barang->stok = $stokawal - $request->get('discount_qty'); 
+            $barang->save();
 
 
-            return redirect()->route('penjualan.index')
-                             ->with('message','Data Berhasil Disimpan');
+        }
+
+
+        return redirect()->route('penjualan.index')
+                        ->with('message','Create penjualan sukses');
     }
 
     public function show($id)

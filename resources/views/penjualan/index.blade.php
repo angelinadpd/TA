@@ -42,7 +42,7 @@
       @foreach($penjualans as $penjualan)
       <tr class="item{{$penjualan->id}}">
          <td> {{$i=$i+1}} </td>
-         <td> PJL{{$datenow}}{{ $penjualan->nota}} </td>
+         <td> PJL{{ $penjualan->nota}} </td>
          <td> {{ $penjualan->tgl}} </td>
          <td> {{ $penjualan->nama_pembeli}} </td>
          <td> {{ $penjualan->nama_barang}} </td>
