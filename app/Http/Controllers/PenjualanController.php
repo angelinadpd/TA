@@ -32,7 +32,7 @@ class PenjualanController extends Controller
     public function create()
     {    
         $barangs=Barang::All();
-        $promos=Promo::All();
+        $promos=Promo::join('barang','promo.barang_id','=','barang.id')->get();
         return view('penjualan.create',compact('barangs','promos'));
     }
 

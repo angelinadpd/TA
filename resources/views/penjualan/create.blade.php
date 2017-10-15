@@ -129,18 +129,18 @@
                                 <div class="table-responsive">
                                     <table class="table">
                                         <div class="form-group">
-                                                <p>Tipe Barang</p>
-                                                <select name="promo_id"  class="form-control">
-                                                    <option>--Pilih Barang--</option>
-                                                    @foreach($promos as $promo)
-                                                    <option value="{{ $promo->promo_id }}"> {{ $barang->tipe_barang }} |  {{ $barang->nama_barang }}</option>
-                                                    @endforeach
-                                                </select>
-                                                {{ ($errors->has('barang_id')) ? $errors->first('barang_id') : '' }}<br>
+                                            <p>Tipe Barang</p>
+                                            <select name="promo_id"  class="form-control">
+                                                <option>--Pilih Barang--</option>
+                                                @foreach($promos as $promo)
+                                                <option value="{{ $promo->promo_id }}"> {{ $promo->tipe_barang }} |  {{ $promo->nama_barang }}</option>
+                                                @endforeach
+                                            </select>
+                                            {{ ($errors->has('barang_id')) ? $errors->first('barang_id') : '' }}<br>
 
-                                                <p>Jumlah Barang</p>
-                                                <input type="text" name="discount_qty" value="" class="form-control">
-                                                {{ ($errors->has('discount_qty')) ? $errors->first('discount_qty') : '' }}<br>
+                                            <p>Jumlah Barang</p>
+                                            <input type="text" name="discount_qty" value="" class="form-control">
+                                            {{ ($errors->has('discount_qty')) ? $errors->first('discount_qty') : '' }}<br>
                                         </div>
                                     </table>
                                 </div>
