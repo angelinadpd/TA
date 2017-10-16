@@ -19,7 +19,6 @@ class PenjualanController extends Controller
         $penjualans = DB::table('penjualan')
             ->leftjoin('barang', 'penjualan.barang_id','=','barang.id')
             ->leftjoin('total', 'penjualan.nota','=','total.nota')
-            ->join('promo','penjualan.promo_id','=','promo.id')
             ->select('penjualan.*','barang.tipe_barang','barang.nama_barang')
             ->orderBy('id', 'desc')
             ->paginate(10);  
@@ -61,7 +60,6 @@ class PenjualanController extends Controller
             $jual->amount = $request->get('amount')[$i]; //hasil qty*harga
             $jual->dpp = $jual->amount*0.1;
             $jual->ppn = $jual->amount+$jual->ppn;
-            $jual->promo_id = $request->get('promo_id');
             
             $data[$i]=$jual->amount;
 
@@ -82,21 +80,26 @@ class PenjualanController extends Controller
             $total = new Total;
             $total->nota = $jual->nota;
             $total->total = $total1 - $diskon;
-            $total->barang_id = $request->get('barang_id');
+            $total->promo_id = $request->input('promo_id');
             $total->discount_qty = $request->get('discount_qty');
             $total->discount_uang =  $diskon;  
             $total->save();
 
         // Update Stok Discount
-        if($request->get('barang_id')!=null and $request->get('discount_qty')){
-            $stokawal = Barang::where('id',$request->get('barang_id'))->value('stok');
-            $barang = Barang::find($request->get('barang_id'));
-            $barang->stok = $stokawal - $request->get('discount_qty'); 
-            $barang->save();
+        // if($request->get('promo_id')!=null and $request->get('discount_qty')){
+        //     $stokawal = Barang::where('id',$request->get('barang_id'))->value('stok');
+        //     $barang = Barang::find($request->get('barang_id'));
+        //     $barang->stok = $stokawal - $request->get('discount_qty'); 
+        //     $barang->save();
+        // }
 
-
-        }
-
+        // Update Stok Promo
+        // if($request->get('promo_id')!=null and $request->get('discount_qty')){
+        //     $stokawal = Promo::where('id',$request->get('barang_id'))->value('discount_barang');
+        //     $promo = Promo::find($request->get('promo_id'));
+        //     $promo->stok = $stokawal - $request->get('discount_qty'); 
+        //     $promo->save();
+        // }
 
         return redirect()->route('penjualan.index')
                         ->with('message','Create penjualan sukses');

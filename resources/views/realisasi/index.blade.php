@@ -30,7 +30,7 @@
     @foreach($realisasis as $realisasi)
     <tr>
        <td> {{$i=$i+1}} </td>
-       <td> A{{$datenow}}{{ $realisasi->no_do}} </td>
+       <td> A{{ $realisasi->no_do}} </td>
        <td> SO{{ $realisasi->no_so}} </td>
        <td> {{ $realisasi->nama_barang}} </td>
        <td> {{ $realisasi->tgl_realisasi}} </td>

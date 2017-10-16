@@ -52,7 +52,7 @@
 			        <td  align="center"> {{ $realisasi->tipe_barang}} </td>
 			        <td  align="center"> {{ $realisasi->nama_barang}} </td>
 			        <td  align="center"> {{ $realisasi->id}} </td>
-			        <td> {{ $realisasi->no_do}} </td>
+			        <td> A{{ $realisasi->no_do}} </td>
 			        <td> {{ $realisasi->tgl_realisasi}} </td>
 			        <td> Rp.{{ $realisasi->price}} </td>
 			        <td  align="center">{{ $realisasi->qty}} </td>

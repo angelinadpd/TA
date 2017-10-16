@@ -33,17 +33,17 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="nota" id="nota" placeholder="Nota">
+                                    <input type="text" class="form-control" name="nota" id="nota" placeholder="Nota" required="">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <input type="date" class="form-control" name="tgl" id="tgl" placeholder="Tanggal Penjualan">
+                                    <input type="date" class="form-control" name="tgl" id="tgl" placeholder="Tanggal Penjualan" required="">
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <input type="text" class="form-control" name="nama_pembeli" id="nama_pembeli" placeholder="Nama Pembeli">
+                                    <input type="text" class="form-control" name="nama_pembeli" id="nama_pembeli" placeholder="Nama Pembeli" required="">
                                 </div>
                             </div>
                         </div>
@@ -78,7 +78,7 @@
                                     <input type="text" class="form-control price" name="price[]" readonly="">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control qty" name="qty[]">
+                                    <input type="text" class="form-control qty" required="" name="qty[]">
                                 </td>
                                 <td>
                                     <input type="text" class="form-control amount" name="amount[]" readonly="" style="text-align: right">
@@ -133,7 +133,7 @@
                                             <select name="promo_id"  class="form-control">
                                                 <option>--Pilih Barang--</option>
                                                 @foreach($promos as $promo)
-                                                <option value="{{ $promo->promo_id }}"> {{ $promo->tipe_barang }} |  {{ $promo->nama_barang }}</option>
+                                                <option value="{{ $promo->id }}"> {{ $promo->tipe_barang }} |  {{ $promo->nama_barang }}</option>
                                                 @endforeach
                                             </select>
                                             {{ ($errors->has('barang_id')) ? $errors->first('barang_id') : '' }}<br>
@@ -170,7 +170,7 @@
             var cell3 = row.insertCell(2);
             var cell4 = row.insertCell(3);
             var cell5 = row.insertCell(4);
-            var cell5 = row.insertCell(5);
+            var cell6 = row.insertCell(5);
             cell1.innerHTML ='<select name="barang[]" required="" class="form-control barang" >'+
                                 '<option>--Pilih Barang--</option>'+
                                 '@foreach($barangs as $barang)'+

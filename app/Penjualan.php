@@ -23,7 +23,7 @@ class Penjualan extends Model
     'price',
     'amount',
     'dpp',
-    'ppn',
+    'ppn'
     ];
 
     public $timestamps =  true;

@@ -71,10 +71,13 @@ class RealisasiController extends Controller
         'qty' => 'required|numeric',
         'status' => 'required',
         ]);
+
+        $datenow = date('Ymd');
+        $no_do = $datenow.$request->no_do;
         
         $realisasi = Realisasi::find($id);
 
-        $realisasi->no_do= $request->no_do;
+        $realisasi->no_do= $no_do;
         $realisasi->tgl_realisasi = $request->tgl_realisasi;
         $realisasi->price = $request->price;
         $realisasi->qty = $request->qty;

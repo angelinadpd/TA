@@ -11,7 +11,7 @@ class Total extends Model
     public $fillable = [
 	    'nota',
 	    'total',
-	    'barang_id',
+	    'promo_id',
 	    'discount_qty',
 	    'discount_uang'
     ];
