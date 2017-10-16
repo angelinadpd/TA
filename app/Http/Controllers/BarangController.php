@@ -67,11 +67,6 @@ class BarangController extends Controller
         }
     }
 
-    public function show($id)
-    {
-
-    }
-
     public function edit($barang)
     {
         $barang=barang::where('id',$barang)->first();

@@ -105,16 +105,6 @@ class PenjualanController extends Controller
                         ->with('message','Create penjualan sukses');
     }
 
-    public function show($id)
-    {
-        $penjualan=Penjualan::find($id);
-        if (!$penjualan) {
-            abort(403);
-        }
-        return view('penjualan.show',compact('penjualan'    )); 
-    }
-
-
     public function destroy($nota)
     {
         $penjualan = Penjualan::where('nota',$nota)->delete();
